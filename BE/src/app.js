@@ -1,13 +1,15 @@
 import express from "express";
 import dotenv from "dotenv";
 import subscriptionRoutes from "./routes/subscriptionRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 
-app.use("/api", subscriptionRoutes);
+app.use("/api/subscriptions", subscriptionRoutes);
+app.use("/api/users", userRoutes);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
