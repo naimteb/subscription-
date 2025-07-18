@@ -2,26 +2,52 @@ import {
   createUser,
   getUserByEmail,
   updateUser,
-  deleteUser,
+  deactivateUser,
   getUserById,
+  getActiveUsers,
 } from "../models/userModel.js";
 
-export async function createUserService(id, name, email, password_hash) {
-  return await createUser(id, name, email, password_hash);
+export async function createUserService(
+  id,
+  name,
+  email,
+  passwordHash,
+  refreshToken
+) {
+  return await createUser(id, name, email, passwordHash, refreshToken);
 }
 
 export async function getUserByEmailService(email) {
   return await getUserByEmail(email);
 }
 
-export async function updateUserService(id, name, email, password_hash) {
-  return await updateUser(id, name, email, password_hash);
+export async function updateUserService(
+  id,
+  name,
+  email,
+  passwordHash,
+  refreshToken,
+  updatedAt,
+  isActive
+) {
+  return await updateUser(
+    id,
+    name,
+    email,
+    passwordHash,
+    refreshToken,
+    updatedAt,
+    isActive
+  );
 }
 
-export async function deleteUserService(id) {
-  return await deleteUser(id);
+export async function deactivateUserService(id) {
+  return await deactivateUser(id);
 }
 
 export async function getUserByIdService(id) {
   return await getUserById(id);
+}
+export async function getActiveUsersService() {
+  return await getActiveUsers();
 }
