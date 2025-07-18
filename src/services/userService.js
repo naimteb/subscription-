@@ -8,37 +8,27 @@ import {
 } from "../models/userModel.js";
 
 export async function createUserService(
-  id,
-  name,
+  username,
+  lastname,
   email,
   passwordHash,
   refreshToken
 ) {
-  return await createUser(id, name, email, passwordHash, refreshToken);
+  return await createUser(
+    username,
+    lastname,
+    email,
+    passwordHash,
+    refreshToken
+  );
 }
 
 export async function getUserByEmailService(email) {
   return await getUserByEmail(email);
 }
 
-export async function updateUserService(
-  id,
-  name,
-  email,
-  passwordHash,
-  refreshToken,
-  updatedAt,
-  isActive
-) {
-  return await updateUser(
-    id,
-    name,
-    email,
-    passwordHash,
-    refreshToken,
-    updatedAt,
-    isActive
-  );
+export async function updateUserService(id, updates) {
+  return await updateUser(id, updates);
 }
 
 export async function deactivateUserService(id) {
