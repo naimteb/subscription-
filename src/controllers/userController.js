@@ -9,10 +9,10 @@ import {
 import { asyncHandler } from "../middleware/asyncHandler.js";
 
 export const createUser = asyncHandler(async (req, res) => {
-  const { id, name, email, passwordHash, refreshToken } = req.body;
+  const { username, lastname, email, passwordHash, refreshToken } = req.body;
   const user = await createUserService(
-    id,
-    name,
+    username,
+    lastname,
     email,
     passwordHash,
     refreshToken
@@ -34,17 +34,8 @@ export const getUserById = asyncHandler(async (req, res) => {
 
 export const updateUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { name, email, passwordHash, refreshToken, updatedAt, isActive } =
-    req.body;
-  const user = await updateUserService(
-    id,
-    name,
-    email,
-    passwordHash,
-    refreshToken,
-    updatedAt,
-    isActive
-  );
+  const updates = req.body;
+  const user = await updateUserService(id, updates);
   res.json(user);
 });
 
@@ -62,3 +53,5 @@ export const getActiveUsers = asyncHandler(async (req, res) => {
   const users = await getActiveUsersService();
   res.json(users);
 });
+
+// create and update user fileds are username and lastname
