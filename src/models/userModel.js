@@ -1,7 +1,7 @@
 import { pool } from "../../db.js";
 export async function createUser(id, name, email, passwordHash, refreshToken) {
   const result = await pool.query(
-    "INSERT INTO users (id, name, email, password_hash, refresh_token) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+    "INSERT INTO users (id, name, email, passwordHash, refreshToken) VALUES ($1, $2, $3, $4, $5) RETURNING *",
     [id, name, email, passwordHash, refreshToken]
   );
   return result.rows[0];
@@ -24,7 +24,7 @@ export async function updateUser(
   isActive
 ) {
   const result = await pool.query(
-    "UPDATE users SET name = $1, email = $2, password_hash = $3, refresh_token = $4, updated_at = $5, isActive = $6 WHERE id = $7 AND isActive=TRUE RETURNING *",
+    "UPDATE users SET name = $1, email = $2, passwordHash = $3, refreshToken = $4, updatedAt = $5, isActive = $6 WHERE id = $7 AND isActive=TRUE RETURNING *",
     [name, email, passwordHash, refreshToken, updatedAt, isActive, id]
   );
   return result.rows[0];
