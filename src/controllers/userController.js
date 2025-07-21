@@ -47,5 +47,3 @@ export const getAllUsers = asyncHandler(async (req, res) => {
   const users = await getActiveUsersService();
   res.json(users);
 });
-
-// create and update user fileds are username and lastname
