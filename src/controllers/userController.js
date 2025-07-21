@@ -9,14 +9,8 @@ import {
 import { asyncHandler } from "../middleware/asyncHandler.js";
 
 export const createUser = asyncHandler(async (req, res) => {
-  const { username, lastname, email, passwordHash, refreshToken } = req.body;
-  const user = await createUserService(
-    username,
-    lastname,
-    email,
-    passwordHash,
-    refreshToken
-  );
+  const createUserDto = req.body;
+  const user = await createUserService(createUserDto);
   res.status(201).json(user);
 });
 

@@ -1,15 +1,11 @@
 import { pool } from "../../db.js";
-export async function createUser(
-  username,
-  lastname,
-  email,
-  passwordHash,
-  refreshToken
-) {
-  const result = await pool.query(
-    "INSERT INTO users (username, lastname, email, passwordHash, refreshToken) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-    [username, lastname, email, passwordHash, refreshToken]
-  );
+export async function createUser(createUserDto) {
+  const fields = Object.keys(createUserDto);
+  const values = Object.values(createUserDto);
+  const query = `INSERT INTO users (${fields.join(", ")}) VALUES (${values
+    .map((_, index) => `$${index + 1}`)
+    .join(", ")}) RETURNING *`;
+  const result = await pool.query(query, values);
   return result.rows[0];
 }
 

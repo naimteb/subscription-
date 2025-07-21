@@ -7,20 +7,8 @@ import {
   getActiveUsers,
 } from "../models/userModel.js";
 
-export async function createUserService(
-  username,
-  lastname,
-  email,
-  passwordHash,
-  refreshToken
-) {
-  return await createUser(
-    username,
-    lastname,
-    email,
-    passwordHash,
-    refreshToken
-  );
+export async function createUserService(createUserDto) {
+  return await createUser(createUserDto);
 }
 
 export async function getUserByEmailService(email) {
