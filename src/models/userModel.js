@@ -1,9 +1,11 @@
 import { pool } from "../../db.js";
-export async function createUser(id, name, email, passwordHash, refreshToken) {
-  const result = await pool.query(
-    "INSERT INTO users (id, name, email, passwordHash, refreshToken) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-    [id, name, email, passwordHash, refreshToken]
-  );
+export async function createUser(data) {
+  const fields = Object.keys(data);
+  const values = Object.values(data);
+  const query = `INSERT INTO users (${fields.join(", ")}) VALUES (${values
+    .map((_, index) => `$${index + 1}`)
+    .join(", ")}) RETURNING *`;
+  const result = await pool.query(query, values);
   return result.rows[0];
 }
 
@@ -14,19 +16,24 @@ export async function getUserByEmail(email) {
   return result.rows[0];
 }
 
-export async function updateUser(
-  id,
-  name,
-  email,
-  passwordHash,
-  refreshToken,
-  updatedAt,
-  isActive
-) {
-  const result = await pool.query(
-    "UPDATE users SET name = $1, email = $2, passwordHash = $3, refreshToken = $4, updatedAt = $5, isActive = $6 WHERE id = $7 AND isActive=TRUE RETURNING *",
-    [name, email, passwordHash, refreshToken, updatedAt, isActive, id]
-  );
+export async function updateUser(id, updates) {
+  const fields = Object.keys(updates);
+  const values = Object.values(updates);
+  if (fields.length === 0) {
+    throw new Error("No updates provided");
+  }
+  //dynamic sql set clause where each field in the request body comes a part of the sql update with the parametrized value
+  const setClause = fields
+    .map((field, index) => `${field} = $${index + 1}`)
+    .join(", ");
+  console.log("setClause", setClause);
+  //  update  timestamp on each update
+  const timestampClause = "updatedAt = CURRENT_TIMESTAMP";
+  const query = `UPDATE users SET ${setClause}, ${timestampClause} WHERE id = $${
+    fields.length + 1
+  } AND isActive=TRUE RETURNING *`;
+
+  const result = await pool.query(query, [...values, id]);
   return result.rows[0];
 }
 
@@ -43,6 +50,8 @@ export async function getUserById(id) {
 }
 
 export async function getActiveUsers() {
-  const result = await pool.query("SELECT * FROM users WHERE isActive = TRUE");
+  const result = await pool.query(
+    "SELECT firstName, lastName, email FROM users WHERE isActive = TRUE"
+  );
   return result.rows;
 }

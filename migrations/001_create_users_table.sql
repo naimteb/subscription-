@@ -9,6 +9,11 @@ CREATE TABLE users (
   isActive BOOLEAN DEFAULT TRUE
 );
 
+alter TABLE users rename column name to username;
+alter TABLE users add column lastname TEXT NOT NULL;
+
+alter TABLE users rename column name to firstName  ;
+
 
 -- ALTER TABLE users
 --   ADD COLUMN subscription_plan TEXT,
