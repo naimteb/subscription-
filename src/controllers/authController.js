@@ -29,6 +29,8 @@ export const logoutUser = asyncHandler(async (req, res) => {
 export const refreshToken = asyncHandler(async (req, res) => {
   const refreshToken = req.body.refreshToken;
   console.log("refreshToken", refreshToken);
-  const token = await refreshTokenService(refreshToken);
-  res.status(200).json({ message: "Token refreshed successfully", token });
+  const accessToken = await refreshTokenService(refreshToken);
+  res
+    .status(200)
+    .json({ message: " access Token refreshed successfully", accessToken });
 });

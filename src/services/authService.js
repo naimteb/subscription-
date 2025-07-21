@@ -32,14 +32,26 @@ export async function loginUserService(data) {
   if (!isMatch) {
     throw new Error("Invalid password");
   }
-  const token = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET, {
-    // token becomes :[header].[payload].[signature]
-    expiresIn: "1h",
-  });
+  const accessToken = jwt.sign(
+    { id: user.id },
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+      // token becomes :[header].[payload].[signature]
+      expiresIn: "1h",
+    }
+  );
+  const refreshToken = jwt.sign(
+    { id: user.id },
+    process.env.REFRESH_TOKEN_SECRET,
+    {
+      expiresIn: "7d",
+    }
+  );
+
   await updateUser(user.id, {
-    refreshToken: token,
+    refreshToken: refreshToken,
   });
-  return token;
+  return { accessToken, refreshToken };
 }
 
 export async function logoutUserService(data) {
@@ -65,8 +77,12 @@ export async function refreshTokenService(refreshToken) {
   if (user.refreshtoken !== refreshToken) {
     throw new Error("Invalid refresh token");
   }
-  const token = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "1h",
-  });
-  return token;
+  const accessToken = jwt.sign(
+    { id: user.id },
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+      expiresIn: "1h",
+    }
+  );
+  return accessToken;
 }
