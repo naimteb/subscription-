@@ -9,8 +9,8 @@ import {
 import { asyncHandler } from "../middleware/asyncHandler.js";
 
 export const createUser = asyncHandler(async (req, res) => {
-  const createUserDto = req.body;
-  const user = await createUserService(createUserDto);
+  const data = req.body;
+  const user = await createUserService(data);
   res.status(201).json(user);
 });
 
@@ -43,7 +43,7 @@ export const deactivateUser = asyncHandler(async (req, res) => {
   }
 });
 
-export const getActiveUsers = asyncHandler(async (req, res) => {
+export const getAllUsers = asyncHandler(async (req, res) => {
   const users = await getActiveUsersService();
   res.json(users);
 });

@@ -1,7 +1,7 @@
 import { pool } from "../../db.js";
-export async function createUser(createUserDto) {
-  const fields = Object.keys(createUserDto);
-  const values = Object.values(createUserDto);
+export async function createUser(data) {
+  const fields = Object.keys(data);
+  const values = Object.values(data);
   const query = `INSERT INTO users (${fields.join(", ")}) VALUES (${values
     .map((_, index) => `$${index + 1}`)
     .join(", ")}) RETURNING *`;
@@ -50,6 +50,8 @@ export async function getUserById(id) {
 }
 
 export async function getActiveUsers() {
-  const result = await pool.query("SELECT * FROM users WHERE isActive = TRUE");
+  const result = await pool.query(
+    "SELECT firstName, lastName, email FROM users WHERE isActive = TRUE"
+  );
   return result.rows;
 }

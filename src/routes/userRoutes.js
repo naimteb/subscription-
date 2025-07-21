@@ -5,7 +5,7 @@ import {
   getUserById,
   updateUser,
   deactivateUser,
-  getActiveUsers,
+  getAllUsers,
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -15,6 +15,6 @@ router.get("/:email", getUserByEmail);
 router.get("/:id", getUserById);
 router.put("/:id", updateUser);
 router.delete("/:id", deactivateUser);
-router.get("/active", getActiveUsers);
+router.get("/", getAllUsers);
 
 export default router;
