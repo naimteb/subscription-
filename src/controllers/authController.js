@@ -4,6 +4,7 @@ import {
   registerUserService,
   loginUserService,
   logoutUserService,
+  refreshTokenService,
 } from "../services/authService.js";
 
 export const registerUser = asyncHandler(async (req, res) => {
@@ -23,4 +24,11 @@ export const logoutUser = asyncHandler(async (req, res) => {
   const data = req.body;
   const user = await logoutUserService(data);
   res.status(200).json({ message: "User logged out successfully", user });
+});
+
+export const refreshToken = asyncHandler(async (req, res) => {
+  const refreshToken = req.body.refreshToken;
+  console.log("refreshToken", refreshToken);
+  const token = await refreshTokenService(refreshToken);
+  res.status(200).json({ message: "Token refreshed successfully", token });
 });

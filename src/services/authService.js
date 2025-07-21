@@ -1,4 +1,9 @@
-import { createUser, getUserByEmail, updateUser } from "../models/userModel.js";
+import {
+  createUser,
+  getUserByEmail,
+  updateUser,
+  getUserById,
+} from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
@@ -27,7 +32,8 @@ export async function loginUserService(data) {
   if (!isMatch) {
     throw new Error("Invalid password");
   }
-  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET, {
+    // token becomes :[header].[payload].[signature]
     expiresIn: "1h",
   });
   await updateUser(user.id, {
@@ -44,4 +50,23 @@ export async function logoutUserService(data) {
   return await updateUser(user.id, {
     refreshToken: null,
   });
+}
+
+export async function refreshTokenService(refreshToken) {
+  if (!refreshToken) {
+    throw new Error("No refresh token provided");
+  }
+  const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+  console.log("decoded ", decoded);
+  const user = await getUserById(decoded.id);
+  if (!user) {
+    throw new Error("Invalid refresh token");
+  }
+  if (user.refreshtoken !== refreshToken) {
+    throw new Error("Invalid refresh token");
+  }
+  const token = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "1h",
+  });
+  return token;
 }
