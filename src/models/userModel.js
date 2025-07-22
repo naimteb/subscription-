@@ -1,5 +1,5 @@
 import { pool } from "../../db.js";
-import camelcaseKeys from "camelcase-keys";
+
 export async function createUser(data) {
   const fields = Object.keys(data);
   const values = Object.values(data);
@@ -8,7 +8,7 @@ export async function createUser(data) {
   const placeholders = values.map((_, index) => `$${index + 1}`).join(", ");
   const query = `INSERT INTO users (${columns}) VALUES (${placeholders}) RETURNING *`;
   const result = await pool.query(query, values);
-  return camelcaseKeys(result.rows[0], { deep: true });
+  return result.rows[0];
 }
 
 export async function getUserByEmail(email) {
@@ -16,7 +16,7 @@ export async function getUserByEmail(email) {
     'SELECT * FROM users WHERE "email" = $1 AND "isActive" = TRUE',
     [email]
   );
-  return camelcaseKeys(result.rows[0], { deep: true });
+  return result.rows[0];
 }
 
 export async function updateUser(id, updates) {
@@ -32,7 +32,7 @@ export async function updateUser(id, updates) {
     fields.length + 1
   } AND "isActive" = TRUE RETURNING *`;
   const result = await pool.query(query, [...values, id]);
-  return camelcaseKeys(result.rows[0], { deep: true });
+  return result.rows[0];
 }
 
 export async function deactivateUser(id) {
@@ -40,16 +40,16 @@ export async function deactivateUser(id) {
     'UPDATE users SET "isActive" = FALSE WHERE "id" = $1',
     [id]
   );
-  return camelcaseKeys(result.rows[0], { deep: true });
+  return result.rows[0];
 }
 export async function getUserById(id) {
   const result = await pool.query('SELECT * FROM users WHERE "id" = $1', [id]);
-  return camelcaseKeys(result.rows[0], { deep: true });
+  return result.rows[0];
 }
 
 export async function getActiveUsers() {
   const result = await pool.query(
     'SELECT "firstName", "lastName", "email" FROM users WHERE "isActive" = TRUE'
   );
-  return camelcaseKeys(result.rows, { deep: true });
+  return result.rows;
 }
