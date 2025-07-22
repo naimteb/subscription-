@@ -10,7 +10,17 @@ CREATE TABLE users (
   "isActive" BOOLEAN DEFAULT TRUE
 );
 
-
+create table merchant(
+  id serial primary key,
+  name text not null,
+  "isActive" boolean default true,
+  "createdAt" timestamp default current_timestamp,
+  "updatedAt" timestamp default current_timestamp
+)
+alter table users add column "merchantId" integer 
+add constraint fk_merchant_id
+references merchant(id) 
+on delete cascade;
 
 
 
