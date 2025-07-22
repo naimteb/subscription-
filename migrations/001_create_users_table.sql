@@ -1,18 +1,18 @@
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
-  name TEXT NOT NULL,
+  "firstName" TEXT NOT NULL,
+  "lastName" TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL,
-  passwordHash TEXT NOT NULL,
-  refreshToken TEXT,
-  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  isActive BOOLEAN DEFAULT TRUE
+  "passwordHash" TEXT NOT NULL,
+  "refreshToken" TEXT,
+  "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  "isActive" BOOLEAN DEFAULT TRUE
 );
 
-alter TABLE users rename column name to username;
-alter TABLE users add column lastname TEXT NOT NULL;
 
-alter TABLE users rename column name to firstName  ;
+
+
 
 
 -- ALTER TABLE users
