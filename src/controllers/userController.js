@@ -21,7 +21,7 @@ export const getUserByEmail = asyncHandler(async (req, res) => {
 });
 
 export const getUserById = asyncHandler(async (req, res) => {
-  const { id } = req.params; //should i switch to id = req.user.id? after i added the auth middleware
+  const { id } = req.params;
   const user = await getUserByIdService(id);
   res.json(user);
 });

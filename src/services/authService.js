@@ -9,7 +9,10 @@ import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 
 dotenv.config();
-
+import {
+  signingBySecretAccessToken,
+  signingBySecretRefreshToken,
+} from "../../utils/signToken.js";
 export async function registerUserService(data) {
   const existing = await getUserByEmail(data.email);
   if (existing) {
@@ -32,22 +35,8 @@ export async function loginUserService(data) {
   if (!isMatch) {
     throw new Error("Invalid password");
   }
-  const accessToken = jwt.sign(
-    { id: user.id },
-    process.env.ACCESS_TOKEN_SECRET,
-    {
-      // token becomes :[header].[payload].[signature]
-      expiresIn: "1h",
-    }
-  );
-  const refreshToken = jwt.sign(
-    { id: user.id },
-    process.env.REFRESH_TOKEN_SECRET,
-    {
-      expiresIn: "7d",
-    }
-  );
-
+  const accessToken = signingBySecretAccessToken(user);
+  const refreshToken = signingBySecretRefreshToken(user);
   await updateUser(user.id, {
     refreshToken: refreshToken,
   });
@@ -77,12 +66,6 @@ export async function refreshTokenService(refreshToken) {
   if (user.refreshtoken !== refreshToken) {
     throw new Error("Invalid refresh token");
   }
-  const accessToken = jwt.sign(
-    { id: user.id },
-    process.env.ACCESS_TOKEN_SECRET,
-    {
-      expiresIn: "1h",
-    }
-  );
+  const accessToken = signingBySecretAccessToken(user);
   return accessToken;
 }

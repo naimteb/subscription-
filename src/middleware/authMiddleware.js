@@ -1,14 +1,25 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
-export const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization;
-  console.log("token", token);
-  if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
+import { asyncHandler } from "./asyncHandler.js";
+export const verifyToken = asyncHandler(async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startWith("Bearer ")) {
+    throw {
+      statusCode: 401,
+      message: "Authorization token missing or malformed ",
+    };
   }
-  const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-  req.user = decoded;
-  console.log(req.user);
-  next();
-};
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    throw {
+      statusCode: 403,
+      message: "Invalid or expired token",
+    };
+  }
+});
