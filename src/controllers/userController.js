@@ -16,19 +16,24 @@ export const createUser = asyncHandler(async (req, res) => {
 
 export const getUserByEmail = asyncHandler(async (req, res) => {
   const { email } = req.params;
+  console.log(email);
   const user = await getUserByEmailService(email);
+  console.log(user);
   res.json(user);
 });
 
 export const getUserById = asyncHandler(async (req, res) => {
   const { id } = req.params;
+  console.log(id);
   const user = await getUserByIdService(id);
   res.json(user);
 });
 
 export const updateUser = asyncHandler(async (req, res) => {
+  console.log("req", req);
   const { id } = req.params;
   const updates = req.body;
+  console.log("updates", updates);
   const user = await updateUserService(id, updates);
   res.json(user);
 });
@@ -47,5 +52,3 @@ export const getAllUsers = asyncHandler(async (req, res) => {
   const users = await getActiveUsersService();
   res.json(users);
 });
-
-// create and update user fileds are username and lastname

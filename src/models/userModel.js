@@ -10,9 +10,10 @@ export async function createUser(data) {
 }
 
 export async function getUserByEmail(email) {
-  const result = await pool.query("SELECT * FROM users WHERE email = $1", [
-    email,
-  ]);
+  const result = await pool.query(
+    "SELECT * FROM users WHERE email = $1 AND isActive = TRUE",
+    [email]
+  );
   return result.rows[0];
 }
 

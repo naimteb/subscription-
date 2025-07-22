@@ -7,14 +7,15 @@ import {
   deactivateUser,
   getAllUsers,
 } from "../controllers/userController.js";
+import { verifyToken } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", createUser);
-router.get("/:email", getUserByEmail);
-router.get("/:id", getUserById);
-router.put("/:id", updateUser);
-router.delete("/:id", deactivateUser);
-router.get("/", getAllUsers);
+router.post("/", verifyToken, createUser);
+router.get("/email/:email", verifyToken, getUserByEmail);
+router.get("/:id", verifyToken, getUserById);
+router.put("/:id", verifyToken, updateUser);
+router.delete("/:id", verifyToken, deactivateUser);
+router.get("/", verifyToken, getAllUsers);
 
 export default router;
