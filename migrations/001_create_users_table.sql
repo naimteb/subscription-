@@ -25,7 +25,7 @@ on delete cascade;
 
 
 
-create table Plan(
+create table plan(
   id serial primary key,
   "merchantId" integer add constraint fk_merchant_id-- the merchant offers a plan 
 references merchant(id) 
@@ -36,10 +36,10 @@ name varchar(50) not null,
   "updatedAt" timestamp default current_timestamp
 )
 
-create table Subscription(
+create table subscription(
   id serial primary key,
   "planId" integer add constraint fk_plan_id
-references Plan(id)-- wich plan  to subscribe
+references plan(id)-- wich plan  to subscribe
 on delete cascade,
   "subscriberType" varchar(10) check ("subscriberType" in ('user', 'merchant')) not null,-- who is subscribing 
   "subscriberId" integer not null,
