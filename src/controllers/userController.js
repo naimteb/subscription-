@@ -32,9 +32,9 @@ export const getUserById = asyncHandler(async (req, res) => {
 export const updateUser = asyncHandler(async (req, res) => {
   console.log("req", req);
   const { id } = req.params;
-  const updates = req.body;
-  console.log("updates", updates);
-  const user = await updateUserService(id, updates);
+  const data = req.body;
+  console.log("updates", data);
+  const user = await updateUserService(id, data);
   res.json(user);
 });
 

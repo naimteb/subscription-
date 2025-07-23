@@ -1,11 +1,10 @@
 import { pool } from "../../db.js";
-
+import {
+  sqlifyKeyValuePairsForCreate,
+  sqlifyKeyValuePairsForUpdate,
+} from "../../utils/sqlUtils.js";
 export async function createMerchant(data) {
-  const fields = Object.keys(data);
-  const values = Object.values(data);
-  const columns = fields.map((field) => `"${field}"`).join(", ");
-  const placeholders = values.map((_, index) => `$${index + 1}`).join(", ");
-
+  const { values, columns, placeholders } = sqlifyKeyValuePairsForCreate(data);
   const query = `INSERT INTO merchant (${columns}) VALUES (${placeholders})  RETURNING *`;
   const result = await pool.query(query, values);
   return result.rows[0];
@@ -30,14 +29,12 @@ export async function getMerchants() {
 }
 
 export async function updateMerchant(id, data) {
-  const fields = Object.keys(data);
-  const values = Object.values(data);
-  const setClause = fields
-    .map((field, index) => `"${field}" = $${index + 2}`)
-    .join(", ");
-  const timestampClause = `"updatedAt" = CURRENT_TIMESTAMP`;
-  const query = `UPDATE merchant SET ${setClause}, ${timestampClause} WHERE id = $1 and "isActive" = TRUE RETURNING *`;
-  const result = await pool.query(query, [id, ...values]);
+  const { setClause, timestampClause, fields, values } =
+    sqlifyKeyValuePairsForUpdate(data);
+  const query = `UPDATE merchant SET ${setClause}, ${timestampClause} WHERE id = $${
+    fields.length + 1
+  } AND "isActive" = TRUE RETURNING *`;
+  const result = await pool.query(query, [...values, id]);
   return result.rows[0];
 }
 
