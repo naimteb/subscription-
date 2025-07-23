@@ -7,8 +7,8 @@ import {
   deactivateMerchant,
 } from "../models/merchantModel.js";
 
-export async function createMerchantService(name) {
-  return await createMerchant(name);
+export async function createMerchantService(data) {
+  return await createMerchant(data);
 }
 
 export async function getMerchantByIdService(id) {
@@ -23,8 +23,8 @@ export async function getMerchantsService() {
   return await getMerchants();
 }
 
-export async function updateMerchantService(id, name) {
-  return await updateMerchant(id, name);
+export async function updateMerchantService(id, data) {
+  return await updateMerchant(id, data);
 }
 
 export async function deactivateMerchantService(id) {
