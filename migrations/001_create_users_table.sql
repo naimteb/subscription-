@@ -25,8 +25,27 @@ on delete cascade;
 
 
 
--- ALTER TABLE users
---   ADD COLUMN subscription_plan TEXT,
---   ADD COLUMN subscription_status TEXT DEFAULT 'inactive',
---   ADD COLUMN subscription_start_date TIMESTAMP,
---   ADD COLUMN subscription_end_date TIMESTAMP; 
+create table subscription(
+  id serial primary key,
+  "merchantId" integer add constraint fk_merchant_id-- the merchant offers a plan 
+references merchant(id) 
+on delete cascade,
+ "planName" varchar(50) not null,
+ price decimal(10,2) not null,
+  "createdAt" timestamp default current_timestamp,
+
+)
+
+create table subscription_record(
+  id serial primary key,
+  "subscriptionId" integer add constraint fk_subscription_id
+references subscription(id)-- wich plan  to subscribe
+on delete cascade,
+  "subscriberType" varchar(10) check ("subscriberType" in ('user', 'merchant')) not null,-- who is subscribing 
+  "subscriberId" integer not null,
+  "createdAt" timestamp default current_timestamp,
+  "updatedAt" timestamp default current_timestamp,
+  "expiresAt" timestamp not null,
+  "canceledAt" timestamp,)
+
+
