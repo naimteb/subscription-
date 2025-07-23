@@ -15,8 +15,8 @@ export async function getUserByEmailService(email) {
   return await getUserByEmail(email);
 }
 
-export async function updateUserService(id, updates) {
-  return await updateUser(id, updates);
+export async function updateUserService(id, data) {
+  return await updateUser(id, data);
 }
 
 export async function deactivateUserService(id) {

@@ -10,13 +10,42 @@ CREATE TABLE users (
   "isActive" BOOLEAN DEFAULT TRUE
 );
 
+create table merchant(
+  id serial primary key,
+  name text not null,
+  "isActive" boolean default true,
+  "createdAt" timestamp default current_timestamp,
+  "updatedAt" timestamp default current_timestamp
+)
+alter table users add column "merchantId" integer 
+add constraint fk_merchant_id
+references merchant(id) 
+on delete cascade;
 
 
 
 
+create table plan(
+  id serial primary key,
+  "merchantId" integer add constraint fk_merchant_id-- the merchant offers a plan 
+references merchant(id) 
+on delete cascade,
+name varchar(50) not null,
+ price decimal(10,2) not null,
+  "createdAt" timestamp default current_timestamp,
+  "updatedAt" timestamp default current_timestamp
+)
 
--- ALTER TABLE users
---   ADD COLUMN subscription_plan TEXT,
---   ADD COLUMN subscription_status TEXT DEFAULT 'inactive',
---   ADD COLUMN subscription_start_date TIMESTAMP,
---   ADD COLUMN subscription_end_date TIMESTAMP; 
+create table subscription(
+  id serial primary key,
+  "planId" integer add constraint fk_plan_id
+references plan(id)-- wich plan  to subscribe
+on delete cascade,
+  "subscriberType" varchar(10) check ("subscriberType" in ('user', 'merchant')) not null,-- who is subscribing 
+  "subscriberId" integer not null,
+  "createdAt" timestamp default current_timestamp,
+  "updatedAt" timestamp default current_timestamp,
+  "expiresAt" timestamp not null,
+  "cancelledAt" timestamp,)
+
+
