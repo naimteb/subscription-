@@ -47,3 +47,12 @@ export async function getActiveUsers() {
   );
   return result.rows;
 }
+export async function getUserPermissions(userId) {
+  const query = `select p.name as permission from users u join
+user_role ur on u.id=ur.role_id  join 
+role_permissions rp on ur.role_id=rp.role_id join  
+permissions p on rp.permission_id=p.id 
+where u.id=$1`;
+  const result = await pool.query(query, [userId]);
+  return result.rows.map((row) => row.permission);
+}
