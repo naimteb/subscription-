@@ -7,6 +7,7 @@ import authRoutes from "./routes/authRoutes.js";
 import merchantRoutes from "./routes/merchantRoute.js";
 import planRoute from "./routes/planRoute.js";
 import subscriptionRoute from "./routes/subscritpionRoute.js";
+import roleRoute from "./routes/roleRoute.js";
 dotenv.config();
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(errorHandler);
 app.use("/api/merchants", merchantRoutes);
 app.use("/api/plans", planRoute);
 app.use("/api/subscriptions", subscriptionRoute);
+app.use("/api/roles", roleRoute);
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

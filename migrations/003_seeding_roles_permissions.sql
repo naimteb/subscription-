@@ -4,27 +4,35 @@ insert into roles (name) values   ('admin'), ('merchant'),('user')
 
 
 
-insert into permissions (name) values ('createPlan'), ('subscribe'),('cancelSubscription')
+insert into permissions (name) values 
+('createPlan'), ('updatePlan'),('deletePlan'),('viewPlan'),-- for plan routes
+('createSubscription'),('updateSubscription'),('deleteSubscription'),('viewSubscription'),-- for subscription routes
+('createMerchant'),('updateMerchant'),('deleteMerchant'),('viewMerchant'),-- for merchant routes
+('createUser'),('updateUser'),('deleteUser'),('viewUser'),-- for user routes
+('createRole'),('updateRole'),('deleteRole'),('viewRole'),-- for role routes
+
+
+
 
 
 -- Admin gets all permissions
-insert into role_permissions (role_id, permission_id)
+insert into role_permissions (roleId, permissionId)
 select r.id, p.id from roles r, permissions p where r.name = 'admin';
 
--- Merchant gets 'createPlan'
-insert into role_permissions (role_id, permission_id)
+-- Merchant
+insert into role_permissions (roleId, permissionId)
 select r.id, p.id from roles r, permissions p 
-where r.name = 'merchant' and p.name = 'createPlan';
+where r.name = 'merchant' and p.name in ('createPlan','updatePlan','deletePlan','viewPlan');
 
--- User gets 'subscribe' and 'cancelSubscription'
-insert into role_permissions (role_id, permission_id)
+-- User 
+insert into role_permissions (roleId, permissionId)
 select r.id, p.id from roles r, permissions p 
-where r.name = 'user' and p.name in ('subscribe', 'cancelSubscription');
+where r.name = 'user' and p.name in ('createSubscription','updateSubscription','deleteSubscription','viewSubscription');
 
 
 
 
-insert into user_role(user_id,role_id)
+insert into user_role(userId,roleId)
 select 1,id from roles where name='admin';
 
 
@@ -32,9 +40,9 @@ select 1,id from roles where name='admin';
 --Uses joins instead of subqueries for performance and clarity
 
 select p.name as permission from users u join
-user_role ur on u.id=ur.role_id  join --this joins user to a role 
-role_permissions rp on ur.role_id=rp.role_id join -- this join role to a permission 
-permissions p on rp.permission_id=p.id -- this join to the actual permissions 
+user_role ur on u.id=ur.roleId  join --this joins user to a role 
+role_permissions rp on ur.roleId=rp.roleId join -- this join role to a permission 
+permissions p on rp.permissionId=p.id -- this join to the actual permissions 
 where u.id=1
 
 
