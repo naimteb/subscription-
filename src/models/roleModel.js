@@ -33,3 +33,15 @@ export async function deleteRole(id) {
   );
   return result.rows[0];
 }
+export async function updateRolePermissionsTable(roleId, permissions) {
+  await pool.query("DELETE FROM role_permissions WHERE 'roleId' = $1", [
+    roleId,
+  ]);
+  for (const permissionId of permissions) {
+    await pool.query(
+      "insert into role_permissions ('roleId', 'permissionId') values ($1, $2)",
+      [roleId, permissionId]
+    );
+  }
+  return true;
+}

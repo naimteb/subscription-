@@ -8,8 +8,8 @@ import {
 import { asyncHandler } from "../middleware/asyncHandler.js";
 
 export const createRole = asyncHandler(async (req, res) => {
-  const { name } = req.body;
-  const role = await createRoleService(name);
+  const { name, permissions } = req.body;
+  const role = await createRoleService(name, permissions);
   res.status(201).json(role);
 });
 
@@ -29,8 +29,8 @@ export const getRoleById = asyncHandler(async (req, res) => {
 
 export const updateRole = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { name } = req.body;
-  const updated = await updateRoleService(id, name);
+  const { name, permissions } = req.body;
+  const updated = await updateRoleService(id, name, permissions);
   if (!updated) {
     return res.status(404).json({ message: "Role not found" });
   }

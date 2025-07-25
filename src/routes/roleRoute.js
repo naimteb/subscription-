@@ -8,6 +8,8 @@ import {
   updateRole,
   deleteRole,
 } from "../controllers/roleController.js";
+import { verifyToken } from "../middleware/authMiddleware.js";
+import { checkPermissions } from "../middleware/checkPermissions.js";
 
 const router = express.Router();
 

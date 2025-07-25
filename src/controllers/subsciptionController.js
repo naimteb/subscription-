@@ -6,33 +6,34 @@ import {
   cancelSubscriptionService,
   getActiveSubscriptionsService,
 } from "../services/subscriptionService.js";
+import { asyncHandler } from "../middleware/asyncHandler.js";
 
-export async function createSubscription(req, res) {
+export const createSubscription = asyncHandler(async (req, res) => {
   const data = req.body;
   const subscription = await createSubscriptionService(data);
   res.status(201).json(subscription);
-}
-export async function getSubscriptionByUserId(req, res) {
+});
+export const getSubscriptionByUserId = asyncHandler(async (req, res) => {
   const { userId } = req.params;
   const subscription = await getSubscriptionByUserIdService(userId);
   res.status(200).json(subscription);
-}
-export async function getSubscriptionByMerchantId(req, res) {
+});
+export const getSubscriptionByMerchantId = asyncHandler(async (req, res) => {
   const { merchantId } = req.params;
   const subscription = await getSubscriptionByMerchantIdService(merchantId);
   res.status(200).json(subscription);
-}
-export async function getSubscriptionByPlanId(req, res) {
+});
+export const getSubscriptionByPlanId = asyncHandler(async (req, res) => {
   const { planId } = req.params;
   const subscription = await getSubscriptionByPlanIdService(planId);
   res.status(200).json(subscription);
-}
-export async function cancelSubscription(req, res) {
+});
+export const cancelSubscription = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const subscription = await cancelSubscriptionService(id);
   res.status(200).json(subscription);
-}
-export async function getActiveSubscriptions(req, res) {
+});
+export const getActiveSubscriptions = asyncHandler(async (req, res) => {
   const subscriptions = await getActiveSubscriptionsService();
   res.status(200).json(subscriptions);
-}
+});
